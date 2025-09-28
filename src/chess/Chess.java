@@ -47,11 +47,12 @@ public class Chess {
 				changePiece.pieceFile = PieceFile.valueOf(""+(char)(moveTo[1]+'a'));
 				changePiece.pieceRank = 9 - moveTo[0]-1;
 				returnPlay.piecesOnBoard.set(board[moveTo[0]][moveTo[1]].index, changePiece);
+				moveNumber++;
 			}else{
 				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
 			}
 		}
-		moveNumber++;
+		
 		/* FILL IN THIS METHOD */
 		
 		/* FOLLOWING LINE IS A PLACEHOLDER TO MAKE COMPILER HAPPY */

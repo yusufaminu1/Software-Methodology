@@ -7,8 +7,34 @@ public class BlackBishop extends BlackPiece {
     }
     @Override
     public boolean move(int[] from, int[] to) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'move'");
+       upDown = from[0]-to[0];
+        leftRight = to[1]-from[1];
+        if(Math.abs(upDown)!=Math.abs(leftRight)){
+            return false;
+        }else{
+            for(int i = 1;i<Math.abs(upDown);i++){
+                if(upDown>0&&leftRight>0&&Chess.board[from[0]-i][from[1]+i]!=null){
+                    return false;
+                }
+                if(upDown<0&&leftRight>0&&Chess.board[from[0]+i][from[1]+i]!=null){
+                    return false;
+                }
+                if(upDown>0&&leftRight<0&&Chess.board[from[0]-i][from[1]-i]!=null){
+                    return false;
+                }
+                if(upDown<0&&leftRight<0&&Chess.board[from[0]+i][from[1]-i]!=null){
+                    return false;
+                }
+            }
+            if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
+                return false;
+            }else if(Chess.board[to[0]][to[1]] instanceof WhitePiece){
+                Chess.currentGame.set(Chess.board[to[0]][to[1]].index,null);
+                return true;
+            }else{
+                return true;
+            }
+        }
     }
 
 }
