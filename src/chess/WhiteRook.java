@@ -23,8 +23,10 @@ public class WhiteRook extends WhitePiece{
                 return false;
             }else if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
                 Chess.currentGame.set(Chess.board[to[0]][to[1]].index,null);
+                moveNumber++;
                 return true;
             }else{
+                moveNumber++;
                 return true;
             }
         }else if(leftRight==0&&(upDown>0||upDown<0)){
@@ -40,8 +42,10 @@ public class WhiteRook extends WhitePiece{
                 return false;
             }else if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
                 Chess.currentGame.set(Chess.board[to[0]][to[1]].index,null);
+                moveNumber++;
                 return true;
             }else{
+                moveNumber++;
                 return true;
             }
 
