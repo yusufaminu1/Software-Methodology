@@ -28,7 +28,14 @@ public class Chess {
 		returnPlay.piecesOnBoard = currentGame;
 		returnPlay.message=null;
 		String sm ="";
-		
+		if(move.equals("resign")){
+			if(moveNumber%2==1){
+				returnPlay.message =ReturnPlay.Message.CHECKMATE_BLACK_WINS;
+			}else{
+				returnPlay.message =ReturnPlay.Message.CHECKMATE_WHITE_WINS;
+			}
+			return returnPlay;
+		}
 		int[] moveFrom = {9-Character.getNumericValue(move.charAt(1))-1,move.charAt(0)-'a'};
 		int[] moveTo = {9-Character.getNumericValue(move.charAt(4))-1,move.charAt(3)-'a'};
 		if(move.length()>5){
@@ -51,6 +58,7 @@ public class Chess {
 				changePiece.pieceFile = PieceFile.valueOf(""+(char)(moveTo[1]+'a'));
 				changePiece.pieceRank = 9 - moveTo[0]-1;
 				returnPlay.piecesOnBoard.set(board[moveTo[0]][moveTo[1]].index, changePiece);
+				moveNumber++;
 				if(board[moveTo[0]][moveTo[1]] instanceof WhitePawn && moveTo[0]==0){
 					int index = board[moveTo[0]][moveTo[1]].index;
 					if(sm.equals("") || sm.equals("Q")){
@@ -84,7 +92,9 @@ public class Chess {
 					}
 					returnPlay.piecesOnBoard.set(board[moveTo[0]][moveTo[1]].index, changePiece);
 				}
-				moveNumber++;
+				if(sm.equals("draw?")){
+					returnPlay.message = ReturnPlay.Message.DRAW;
+				}
 			}else{
 				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
 			}
@@ -104,6 +114,11 @@ public class Chess {
 	public static void start() {
 		int index = 0;
 		currentGame.clear();
+		for(int i = 0;i<board.length;i++){
+			for(int j = 0;j<board[1].length;j++){
+				board[i][j]=null;
+			}
+		}
 		for(int i = 0;i<2;i++){
             for(int j = 0;j<8;j++){
 				ReturnPiece tempPiece = new ReturnPiece();
@@ -112,7 +127,6 @@ public class Chess {
                     tempPiece.pieceType = PieceType.BP;
 					tempPieceType = new BlackPawn(index);
                 }else{
-					continue;/* 
 					if(j==0||j==7){
                     	tempPiece.pieceType = PieceType.BR;
 						tempPieceType = new BlackRook(index);
@@ -129,7 +143,6 @@ public class Chess {
                     	tempPiece.pieceType = PieceType.BK;
 						tempPieceType = new BlackKing(index);
 					}
-						*/
                 }
 				index++;
 				tempPiece.pieceFile = PieceFile.valueOf(""+(char)(j+'a'));
@@ -141,7 +154,7 @@ public class Chess {
         for(int i = 7;i>5;i--){
             for(int j = 0;j<8;j++){
 				ReturnPiece tempPiece = new ReturnPiece();
-				Piece tempPieceType=null;
+				Piece tempPieceType;
                 if(i==6){
                     tempPiece.pieceType = PieceType.WP;
 					tempPieceType = new WhitePawn(index);
@@ -149,26 +162,18 @@ public class Chess {
 					if(j==0||j==7){
                     	tempPiece.pieceType = PieceType.WR;
 						tempPieceType = new WhiteRook(index);
-					/* }else if(j==1||j==6){
-						
+					}else if(j==1||j==6){
                     	tempPiece.pieceType = PieceType.WN;
 						tempPieceType = new WhiteKnight(index);
-					
 					}else if(j==2||j==5){
-						
                     	tempPiece.pieceType = PieceType.WB;
 						tempPieceType = new WhiteBishop(index);
-					
 					}else if(j == 3){
-						/* 
                     	tempPiece.pieceType = PieceType.WQ;
 						tempPieceType = new WhiteQueen(index);
-						*/
-					}else if(j==4) {
+					}else {
                     	tempPiece.pieceType = PieceType.WK;
 						tempPieceType = new WhiteKing(index);
-					}else{
-						continue;
 					}
                 }
 				index++;

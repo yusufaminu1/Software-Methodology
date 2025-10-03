@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "PlayChess",
+            "request": "launch",
+            "mainClass": "chess.PlayChess",
+            "projectName": "Software-Methodology_69492e2a"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
