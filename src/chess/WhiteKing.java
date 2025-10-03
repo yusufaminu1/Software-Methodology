@@ -1,5 +1,7 @@
 package chess;
 
+import chess.ReturnPiece.PieceFile;
+
 public class WhiteKing extends WhitePiece {
     
     public WhiteKing(int index) {
@@ -42,8 +44,28 @@ public class WhiteKing extends WhitePiece {
                 moveNumber++;
                 return true;
             }
-        }else if(true){
-            return false;
+        }else if(moveNumber==0&&(to[0]==7&&(to[1]==2||to[1]==6))){
+            if(to[1]==6&&Chess.board[7][7] instanceof WhiteRook&&Chess.board[7][7].moveNumber==0&&Chess.board[7][6]==null&&Chess.board[7][5]==null){
+                Chess.board[7][5]= Chess.board[7][7];
+				Chess.board[7][7]=null;
+				ReturnPiece changePiece = Chess.currentGame.get(Chess.board[7][5].index);
+				changePiece.pieceFile = PieceFile.valueOf("f");
+				changePiece.pieceRank = 1;
+				Chess.currentGame.set(Chess.board[7][5].index, changePiece);
+                moveNumber++;
+                return true;
+            }else if(to[1]==2&&Chess.board[7][0] instanceof WhiteRook&&Chess.board[7][0].moveNumber==0&&Chess.board[7][1]==null&&Chess.board[7][2]==null&&Chess.board[7][3]==null){
+               Chess.board[7][3]= Chess.board[7][0];
+				Chess.board[7][0]=null;
+				ReturnPiece changePiece = Chess.currentGame.get(Chess.board[7][3].index);
+				changePiece.pieceFile = PieceFile.valueOf("d");
+				changePiece.pieceRank = 1;
+				Chess.currentGame.set(Chess.board[7][3].index, changePiece);
+                moveNumber++;
+                return true;
+            }else{
+                return false;
+            }
         }else{
             return false;
         }

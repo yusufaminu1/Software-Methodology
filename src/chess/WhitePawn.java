@@ -20,6 +20,7 @@ public class WhitePawn extends WhitePiece{
             }else if(upDown==1){
                 firstMove=false;
                 moveNumber++;
+                
                 return true;
             }else if(upDown==2&&firstMove==true){
                 firstMove=false;
@@ -33,7 +34,6 @@ public class WhitePawn extends WhitePiece{
                 if(Chess.board[to[0]+1][to[1]] instanceof BlackPawn&&to[0]+1==3&&Chess.board[to[0]+1][to[1]].moveNumber==1){
                     Chess.currentGame.set(Chess.board[to[0]+1][to[1]].index,null);
                     Chess.board[to[0]+1][to[1]]=null;
-                    firstMove=false;
                     moveNumber++;
                     return true;
                 }
@@ -52,5 +52,6 @@ public class WhitePawn extends WhitePiece{
         return false;
        
     }
+   
 
 }

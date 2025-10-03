@@ -1,5 +1,7 @@
 package chess;
 
+import chess.ReturnPiece.PieceFile;
+
 public class BlackKing extends BlackPiece{
     
     public BlackKing(int index) {
@@ -7,8 +9,66 @@ public class BlackKing extends BlackPiece{
     }
     @Override
     public boolean move(int[] from, int[] to) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'move'");
+        upDown = from[0]-to[0];
+        leftRight = to[1]-from[1];
+        if(Math.abs(upDown)==Math.abs(leftRight)&&Math.abs(leftRight)==1){
+            if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
+                return false;
+            }else if(Chess.board[to[0]][to[1]] instanceof WhitePiece){
+                Chess.currentGame.set(Chess.board[to[0]][to[1]].index,null);
+                moveNumber++;
+                return true;
+            }else{
+                moveNumber++;
+                return true;
+            }
+        }else if (upDown==0&&(leftRight==1||leftRight==-1)){
+            if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
+                return false;
+            }else if(Chess.board[to[0]][to[1]] instanceof WhitePiece){
+                Chess.currentGame.set(Chess.board[to[0]][to[1]].index,null);
+                moveNumber++;
+                return true;
+            }else{
+                moveNumber++;
+                return true;
+            }
+        }else if(leftRight==0&&(upDown==1||upDown==-1)){
+            if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
+                return false;
+            }else if(Chess.board[to[0]][to[1]] instanceof WhitePiece){
+                Chess.currentGame.set(Chess.board[to[0]][to[1]].index,null);
+                moveNumber++;
+                return true;
+            }else{
+                moveNumber++;
+                return true;
+            }
+        }else if(moveNumber==0&&(to[0]==7&&(to[1]==2||to[1]==6))){
+            if(to[1]==6&&Chess.board[0][7] instanceof BlackRook&&Chess.board[0][7].moveNumber==0&&Chess.board[0][6]==null&&Chess.board[0][5]==null){
+                Chess.board[0][5]= Chess.board[0][7];
+				Chess.board[0][7]=null;
+				ReturnPiece changePiece = Chess.currentGame.get(Chess.board[0][5].index);
+				changePiece.pieceFile = PieceFile.valueOf("f");
+				changePiece.pieceRank = 8;
+				Chess.currentGame.set(Chess.board[0][5].index, changePiece);
+                moveNumber++;
+                return true;
+            }else if(to[1]==2&&Chess.board[0][0] instanceof BlackRook&&Chess.board[0][0].moveNumber==0&&Chess.board[0][1]==null&&Chess.board[0][2]==null&&Chess.board[0][3]==null){
+               Chess.board[0][3]= Chess.board[0][0];
+				Chess.board[0][0]=null;
+				ReturnPiece changePiece = Chess.currentGame.get(Chess.board[0][3].index);
+				changePiece.pieceFile = PieceFile.valueOf("d");
+				changePiece.pieceRank = 8;
+				Chess.currentGame.set(Chess.board[0][3].index, changePiece);
+                moveNumber++;
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
     }
 
 }
