@@ -6,6 +6,7 @@ public abstract class Piece {
     int leftRight;
     int moveNumber;
 
-    abstract boolean move(int[] from, int[] to);
+    abstract boolean move(int[] from, int[] to, boolean ifSelfCheck);
+
     
 }

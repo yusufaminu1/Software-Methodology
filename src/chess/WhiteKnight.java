@@ -6,7 +6,7 @@ public class WhiteKnight extends WhitePiece {
         this.index = index;
     }
     @Override
-    public boolean move(int[] from, int[] to) {
+    public boolean move(int[] from, int[] to,boolean ifSelfCheck) {
         upDown = from[0]-to[0];
         leftRight = to[1]-from[1];
         if(!(Math.abs(upDown)==1&&Math.abs(leftRight)==2)&&!(Math.abs(upDown)==2&&Math.abs(leftRight)==1)){
@@ -14,10 +14,12 @@ public class WhiteKnight extends WhitePiece {
         }else{
             if(Chess.board[to[0]][to[1]] instanceof WhitePiece){
                 return false;
-            }else if (Chess.board[to[0]][to[1]] instanceof BlackPiece){
-                    Chess.currentGame.set(Chess.board[to[0]][to[1]].index,null);
-                    return true;
             }else{
+                if(ifSelfCheck){
+                    if(!checkSelfCheck(from, to)){
+                        return false;
+                    }
+                }
                 return true;
             }
         }

@@ -7,7 +7,7 @@ public class WhiteRook extends WhitePiece{
     }
 
     @Override
-    public boolean move(int[] from, int[] to) {
+    public boolean move(int[] from, int[] to,boolean ifSelfCheck) {
         upDown = from[0]-to[0];
         leftRight = to[1]-from[1];
         if (upDown==0&&(leftRight>0||leftRight<0)){
@@ -21,12 +21,12 @@ public class WhiteRook extends WhitePiece{
             }
             if(Chess.board[to[0]][to[1]] instanceof WhitePiece){
                 return false;
-            }else if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
-                Chess.currentGame.set(Chess.board[to[0]][to[1]].index,null);
-                moveNumber++;
-                return true;
             }else{
-                moveNumber++;
+                if(ifSelfCheck){
+                    if(!checkSelfCheck(from, to)){
+                        return false;
+                    }
+                }
                 return true;
             }
         }else if(leftRight==0&&(upDown>0||upDown<0)){
@@ -40,12 +40,12 @@ public class WhiteRook extends WhitePiece{
             }
             if(Chess.board[to[0]][to[1]] instanceof WhitePiece){
                 return false;
-            }else if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
-                Chess.currentGame.set(Chess.board[to[0]][to[1]].index,null);
-                moveNumber++;
-                return true;
             }else{
-                moveNumber++;
+                if(ifSelfCheck){
+                    if(!checkSelfCheck(from, to)){
+                        return false;
+                    }
+                }
                 return true;
             }
 

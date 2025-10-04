@@ -6,7 +6,7 @@ public class BlackRook extends BlackPiece{
         this.index = index;
     }
     @Override
-    public boolean move(int[] from, int[] to) {
+    public boolean move(int[] from, int[] to,boolean ifSelfCheck) {
         upDown = from[0]-to[0];
         leftRight = to[1]-from[1];
         if (upDown==0&&(leftRight>0||leftRight<0)){
@@ -20,12 +20,12 @@ public class BlackRook extends BlackPiece{
             }
             if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
                 return false;
-            }else if(Chess.board[to[0]][to[1]] instanceof WhitePiece){
-                Chess.currentGame.set(Chess.board[to[0]][to[1]].index,null);
-                moveNumber++;
-                return true;
             }else{
-                moveNumber++;
+                if(ifSelfCheck){
+                    if(!checkSelfCheck(from, to)){
+                        return false;
+                    }
+                }
                 return true;
             }
         }else if(leftRight==0&&(upDown>0||upDown<0)){
@@ -39,12 +39,12 @@ public class BlackRook extends BlackPiece{
             }
             if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
                 return false;
-            }else if(Chess.board[to[0]][to[1]] instanceof WhitePiece){
-                Chess.currentGame.set(Chess.board[to[0]][to[1]].index,null);
-                moveNumber++;
-                return true;
             }else{
-                moveNumber++;
+                if(ifSelfCheck){
+                    if(!checkSelfCheck(from, to)){
+                        return false;
+                    }
+                }
                 return true;
             }
 

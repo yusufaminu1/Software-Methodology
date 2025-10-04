@@ -11,6 +11,8 @@ public class Chess {
 		static ArrayList<ReturnPiece> currentGame = new ArrayList<>();
 		static Piece[][] board = new Piece[8][8];
 		static int moveNumber = 1;
+		static int[] blackKing = new int[2];
+		static int[] whiteKing = new int[2];
         enum Player { white, black }
     
 	/**
@@ -51,7 +53,10 @@ public class Chess {
 			returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
 		}
 		if(returnPlay.message==null){
-			if(board[moveFrom[0]][moveFrom[1]].move(moveFrom,moveTo)){
+			if(board[moveFrom[0]][moveFrom[1]].move(moveFrom,moveTo,true)){
+				if((board[moveTo[0]][moveTo[1]] instanceof BlackPiece && moveNumber%2==1)||(board[moveTo[0]][moveTo[1]] instanceof WhitePiece && moveNumber%2==0)){
+					Chess.currentGame.set(Chess.board[moveTo[0]][moveTo[1]].index,null);
+				}
 				board[moveTo[0]][moveTo[1]]= board[moveFrom[0]][moveFrom[1]];
 				board[moveFrom[0]][moveFrom[1]]=null;
 				ReturnPiece changePiece = returnPlay.piecesOnBoard.get(board[moveTo[0]][moveTo[1]].index);
@@ -59,6 +64,15 @@ public class Chess {
 				changePiece.pieceRank = 9 - moveTo[0]-1;
 				returnPlay.piecesOnBoard.set(board[moveTo[0]][moveTo[1]].index, changePiece);
 				moveNumber++;
+				if(board[moveTo[0]][moveTo[1]] instanceof BlackKing){
+						blackKing[0]=moveTo[0];
+						blackKing[1]=moveTo[1];
+				}
+				if(board[moveTo[0]][moveTo[1]] instanceof WhiteKing){
+						whiteKing[0]=moveTo[0];
+						whiteKing[1]=moveTo[1];
+				}
+					
 				if(board[moveTo[0]][moveTo[1]] instanceof WhitePawn && moveTo[0]==0){
 					int index = board[moveTo[0]][moveTo[1]].index;
 					if(sm.equals("") || sm.equals("Q")){
@@ -94,7 +108,17 @@ public class Chess {
 				}
 				if(sm.equals("draw?")){
 					returnPlay.message = ReturnPlay.Message.DRAW;
+					return returnPlay;
 				}
+				for (int i = 0; i < 8; i++) {
+            		for (int j = 0; j < 8;j++) {
+                		int[] from2 = { i, j };
+                		if ((Chess.board[i][j] instanceof BlackPiece && Chess.board[i][j].move(from2, Chess.whiteKing,false))||(Chess.board[i][j] instanceof WhitePiece && Chess.board[i][j].move(from2, Chess.blackKing,false))) {
+							returnPlay.message = ReturnPlay.Message.CHECK;
+                		}
+            		}
+        		}
+				board[moveTo[0]][moveTo[1]].moveNumber++;
 			}else{
 				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
 			}
@@ -124,6 +148,7 @@ public class Chess {
 				ReturnPiece tempPiece = new ReturnPiece();
 				Piece tempPieceType;
                 if(i==1){
+					
                     tempPiece.pieceType = PieceType.BP;
 					tempPieceType = new BlackPawn(index);
                 }else{
@@ -140,6 +165,8 @@ public class Chess {
                     	tempPiece.pieceType = PieceType.BQ;
 						tempPieceType = new BlackQueen(index);
 					}else {
+						blackKing[0]=i;
+						blackKing[1]=j;
                     	tempPiece.pieceType = PieceType.BK;
 						tempPieceType = new BlackKing(index);
 					}
@@ -156,22 +183,28 @@ public class Chess {
 				ReturnPiece tempPiece = new ReturnPiece();
 				Piece tempPieceType;
                 if(i==6){
-                    tempPiece.pieceType = PieceType.WP;
+					//continue;
+					tempPiece.pieceType = PieceType.WP;
 					tempPieceType = new WhitePawn(index);
                 }else{
 					if(j==0||j==7){
                     	tempPiece.pieceType = PieceType.WR;
 						tempPieceType = new WhiteRook(index);
 					}else if(j==1||j==6){
+						//continue;
                     	tempPiece.pieceType = PieceType.WN;
 						tempPieceType = new WhiteKnight(index);
 					}else if(j==2||j==5){
+						//continue;
                     	tempPiece.pieceType = PieceType.WB;
 						tempPieceType = new WhiteBishop(index);
 					}else if(j == 3){
+						//continue;
                     	tempPiece.pieceType = PieceType.WQ;
 						tempPieceType = new WhiteQueen(index);
 					}else {
+						whiteKing[0]=i;
+						whiteKing[1]=j;
                     	tempPiece.pieceType = PieceType.WK;
 						tempPieceType = new WhiteKing(index);
 					}
