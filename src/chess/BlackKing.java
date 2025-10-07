@@ -8,15 +8,15 @@ public class BlackKing extends BlackPiece{
         this.index = index;
     }
     @Override
-    public boolean move(int[] from, int[] to,boolean ifSelfCheck) {
+    public boolean move(int[] from, int[] to,boolean checkSelfCheck) {
         upDown = from[0]-to[0];
         leftRight = to[1]-from[1];
         if(Math.abs(upDown)==Math.abs(leftRight)&&Math.abs(leftRight)==1){
             if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
                 return false;
             }else{
-                if(ifSelfCheck){
-                    if(!checkSelfCheck(from, to)){
+                if(checkSelfCheck){
+                    if(!SelfCheck(from, to)){
                         return false;
                     }
                 }
@@ -29,8 +29,8 @@ public class BlackKing extends BlackPiece{
             if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
                 return false;
             }else{
-                if(ifSelfCheck){
-                    if(!checkSelfCheck(from, to)){
+                if(checkSelfCheck){
+                    if(!SelfCheck(from, to)){
                         return false;
                     }
                 }
@@ -43,8 +43,8 @@ public class BlackKing extends BlackPiece{
             if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
                 return false;
             }else{
-                if(ifSelfCheck){
-                    if(!checkSelfCheck(from, to)){
+                if(checkSelfCheck){
+                    if(!SelfCheck(from, to)){
                         return false;
                     }
                 }
@@ -55,8 +55,8 @@ public class BlackKing extends BlackPiece{
             }
         }else if(moveNumber==0&&(to[0]==7&&(to[1]==2||to[1]==6))){
             if(to[1]==6&&Chess.board[0][7] instanceof BlackRook&&Chess.board[0][7].moveNumber==0&&Chess.board[0][6]==null&&Chess.board[0][5]==null){
-                if(ifSelfCheck){
-                        if(!checkSelfCheck(from, to)){
+                if(checkSelfCheck){
+                        if(!SelfCheck(from, to)){
                             return false;
                         }
                     }
@@ -70,8 +70,8 @@ public class BlackKing extends BlackPiece{
                 Chess.blackKing[1] = to[1];
                 return true;
             }else if(to[1]==2&&Chess.board[0][0] instanceof BlackRook&&Chess.board[0][0].moveNumber==0&&Chess.board[0][1]==null&&Chess.board[0][2]==null&&Chess.board[0][3]==null){
-                if(ifSelfCheck){
-                    if(!checkSelfCheck(from, to)){
+                if(checkSelfCheck){
+                    if(!SelfCheck(from, to)){
                         return false;
                     }
                 }
@@ -94,7 +94,7 @@ public class BlackKing extends BlackPiece{
     }
 
     @Override
-    boolean checkSelfCheck(int[] from, int[] to) {
+    boolean SelfCheck(int[] from, int[] to) {
         Piece[] temp = new Piece[1];
         Chess.blackKing[0] = to[0];
         Chess.blackKing[1] = to[1];

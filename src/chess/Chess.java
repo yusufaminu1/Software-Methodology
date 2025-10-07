@@ -32,9 +32,9 @@ public class Chess {
 		String sm ="";
 		if(move.equals("resign")){
 			if(moveNumber%2==1){
-				returnPlay.message =ReturnPlay.Message.CHECKMATE_BLACK_WINS;
+				returnPlay.message =ReturnPlay.Message.RESIGN_BLACK_WINS;
 			}else{
-				returnPlay.message =ReturnPlay.Message.CHECKMATE_WHITE_WINS;
+				returnPlay.message =ReturnPlay.Message.RESIGN_WHITE_WINS;
 			}
 			return returnPlay;
 		}

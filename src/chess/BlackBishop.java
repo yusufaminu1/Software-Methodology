@@ -6,7 +6,7 @@ public class BlackBishop extends BlackPiece {
         this.index = index;
     }
     @Override
-    public boolean move(int[] from, int[] to,boolean ifSelfCheck) {
+    public boolean move(int[] from, int[] to,boolean checkSelfCheck) {
        upDown = from[0]-to[0];
         leftRight = to[1]-from[1];
         if(Math.abs(upDown)!=Math.abs(leftRight)){
@@ -29,8 +29,8 @@ public class BlackBishop extends BlackPiece {
             if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
                 return false;
             }else{
-                if(ifSelfCheck){
-                    if(!checkSelfCheck(from, to)){
+                if(checkSelfCheck){
+                    if(!SelfCheck(from, to)){
                         return false;
                     }
                 }

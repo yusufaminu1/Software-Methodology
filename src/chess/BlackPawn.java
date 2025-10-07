@@ -6,7 +6,7 @@ public class BlackPawn extends BlackPiece {
         this.index = index;
     }
     @Override
-    public boolean move(int[] from, int[] to,boolean ifSelfCheck) {
+    public boolean move(int[] from, int[] to,boolean checkSelfCheck) {
         upDown = from[0]-to[0];
         leftRight = to[1]-from[1];
         
@@ -17,15 +17,15 @@ public class BlackPawn extends BlackPiece {
             if(upDown<-2||upDown>-1){
                 return false;
             }else if(upDown==-1){
-                if(ifSelfCheck){
-                    if(!checkSelfCheck(from, to)){
+                if(checkSelfCheck){
+                    if(!SelfCheck(from, to)){
                         return false;
                     }
                 }
                 return true;
             }else if(upDown==-2&&moveNumber==0){
-                if(ifSelfCheck){
-                    if(!checkSelfCheck(from, to)){
+                if(checkSelfCheck){
+                    if(!SelfCheck(from, to)){
                         return false;
                     }
                 }
@@ -36,16 +36,16 @@ public class BlackPawn extends BlackPiece {
                 return false;
             }else{
                 if(Chess.board[to[0]][to[1]] instanceof WhitePiece){
-                    if(ifSelfCheck){
-                        if(!checkSelfCheck(from, to)){
+                    if(checkSelfCheck){
+                        if(!SelfCheck(from, to)){
                             return false;
                         }
                     }
                     return true;
                 }
                 else if(Chess.board[to[0]-1][to[1]] instanceof WhitePawn&&to[0]-1==4&&Chess.board[to[0]-1][to[1]].moveNumber==1){
-                    if(ifSelfCheck){
-                        if(!checkSelfCheck(from, to)){
+                    if(checkSelfCheck){
+                        if(!SelfCheck(from, to)){
                             return false;
                         }
                     }

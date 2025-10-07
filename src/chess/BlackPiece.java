@@ -2,7 +2,7 @@ package chess;
 
 public abstract class BlackPiece extends Piece{
 
-    boolean checkSelfCheck(int[] from, int[] to) {
+    boolean SelfCheck(int[] from, int[] to) {
         Piece[] temp = new Piece[1];
         if (Chess.board[to[0]][to[1]] != null) {
             temp[0] = Chess.board[to[0]][to[1]];
