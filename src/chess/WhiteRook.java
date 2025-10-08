@@ -7,7 +7,7 @@ public class WhiteRook extends WhitePiece{
     }
 
     @Override
-    public boolean move(int[] from, int[] to,boolean ifSelfCheck) {
+    public boolean move(int[] from, int[] to,boolean checkSelfCheck) {
         upDown = from[0]-to[0];
         leftRight = to[1]-from[1];
         if (upDown==0&&(leftRight>0||leftRight<0)){
@@ -22,8 +22,8 @@ public class WhiteRook extends WhitePiece{
             if(Chess.board[to[0]][to[1]] instanceof WhitePiece){
                 return false;
             }else{
-                if(ifSelfCheck){
-                    if(!checkSelfCheck(from, to)){
+                if(checkSelfCheck){
+                    if(!SelfCheck(from, to)){
                         return false;
                     }
                 }
@@ -41,8 +41,8 @@ public class WhiteRook extends WhitePiece{
             if(Chess.board[to[0]][to[1]] instanceof WhitePiece){
                 return false;
             }else{
-                if(ifSelfCheck){
-                    if(!checkSelfCheck(from, to)){
+                if(checkSelfCheck){
+                    if(!SelfCheck(from, to)){
                         return false;
                     }
                 }
