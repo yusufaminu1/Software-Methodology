@@ -1,7 +1,7 @@
 package chess;
 
 public abstract class BlackPiece extends Piece{
-
+    //Check if the move will put own king in check
     boolean SelfCheck(int[] from, int[] to) {
         Piece[] temp = new Piece[1];
         if (Chess.board[to[0]][to[1]] != null) {

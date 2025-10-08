@@ -7,8 +7,9 @@ public class BlackBishop extends BlackPiece {
     }
     @Override
     public boolean move(int[] from, int[] to,boolean checkSelfCheck) {
-       upDown = from[0]-to[0];
+        upDown = from[0]-to[0];
         leftRight = to[1]-from[1];
+        // Bishop move diagonally
         if(Math.abs(upDown)!=Math.abs(leftRight)){
             return false;
         }else{

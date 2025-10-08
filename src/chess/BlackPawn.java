@@ -1,7 +1,6 @@
 package chess;
 
 public class BlackPawn extends BlackPiece {
-    boolean firstMove=true;
     public BlackPawn(int index) {
         this.index = index;
     }
@@ -9,7 +8,7 @@ public class BlackPawn extends BlackPiece {
     public boolean move(int[] from, int[] to,boolean checkSelfCheck) {
         upDown = from[0]-to[0];
         leftRight = to[1]-from[1];
-        
+        // Pawn move
         if(leftRight==0){
             if(Chess.board[to[0]][to[1]]!=null){
                     return false;
@@ -31,6 +30,7 @@ public class BlackPawn extends BlackPiece {
                 }
                 return true;
             }
+        // Capture move
         }else if(leftRight==-1||leftRight==1){
             if(upDown!=-1){
                 return false;
@@ -43,6 +43,7 @@ public class BlackPawn extends BlackPiece {
                     }
                     return true;
                 }
+                // En Passant
                 else if(Chess.board[to[0]-1][to[1]] instanceof WhitePawn&&to[0]-1==4&&Chess.board[to[0]-1][to[1]].moveNumber==1){
                     if(checkSelfCheck){
                         if(!SelfCheck(from, to)){

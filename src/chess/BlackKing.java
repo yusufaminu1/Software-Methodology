@@ -11,6 +11,7 @@ public class BlackKing extends BlackPiece{
     public boolean move(int[] from, int[] to,boolean checkSelfCheck) {
         upDown = from[0]-to[0];
         leftRight = to[1]-from[1];
+        // King move one step any direction 
         if(Math.abs(upDown)==Math.abs(leftRight)&&Math.abs(leftRight)==1){
             if(Chess.board[to[0]][to[1]] instanceof BlackPiece){
                 return false;
@@ -53,6 +54,7 @@ public class BlackKing extends BlackPiece{
                 Chess.blackKing[1] = to[1];
                 return true;
             }
+        // Castling
         }else if(moveNumber==0&&(to[0]==7&&(to[1]==2||to[1]==6))){
             if(to[1]==6&&Chess.board[0][7] instanceof BlackRook&&Chess.board[0][7].moveNumber==0&&Chess.board[0][6]==null&&Chess.board[0][5]==null){
                 if(checkSelfCheck){
@@ -92,7 +94,7 @@ public class BlackKing extends BlackPiece{
             return false;
         }
     }
-
+    // Check if the move will put own king in check
     @Override
     boolean SelfCheck(int[] from, int[] to) {
         Piece[] temp = new Piece[1];

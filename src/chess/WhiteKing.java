@@ -11,6 +11,7 @@ public class WhiteKing extends WhitePiece {
     public boolean move(int[] from, int[] to,boolean checkSelfCheck) {
         upDown = from[0]-to[0];
         leftRight = to[1]-from[1];
+        // King move one step in any direction 
         if(Math.abs(upDown)==Math.abs(leftRight)&&Math.abs(leftRight)==1){
             if(Chess.board[to[0]][to[1]] instanceof WhitePiece){
                 return false;
@@ -53,6 +54,7 @@ public class WhiteKing extends WhitePiece {
                 Chess.whiteKing[1] = to[1];
                 return true;
             }
+        // Castling
         }else if(moveNumber==0&&(to[0]==7&&(to[1]==2||to[1]==6))){
             if(to[1]==6&&Chess.board[7][7] instanceof WhiteRook&&Chess.board[7][7].moveNumber==0&&Chess.board[7][6]==null&&Chess.board[7][5]==null){
                 if(checkSelfCheck){

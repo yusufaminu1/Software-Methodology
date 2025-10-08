@@ -9,6 +9,7 @@ public class WhiteBishop extends WhitePiece{
     public boolean move(int[] from, int[] to,boolean checkSelfCheck) {
         upDown = from[0]-to[0];
         leftRight = to[1]-from[1];
+        // Bishop moves in diagonal line
         if(Math.abs(upDown)!=Math.abs(leftRight)){
             return false;
         }else{
