@@ -10,6 +10,7 @@ public class WhiteRook extends WhitePiece{
     public boolean move(int[] from, int[] to,boolean checkSelfCheck) {
         upDown = from[0]-to[0];
         leftRight = to[1]-from[1];
+        // Rook move horizontally
         if (upDown==0&&(leftRight>0||leftRight<0)){
             for(int i = 1;i<Math.abs(leftRight);i++){
                 if(leftRight>0&&Chess.board[from[0]][from[1]+i]!=null){
@@ -29,6 +30,7 @@ public class WhiteRook extends WhitePiece{
                 }
                 return true;
             }
+        // Rook move vertically
         }else if(leftRight==0&&(upDown>0||upDown<0)){
            for(int i = 1;i<Math.abs(upDown);i++){
                 if(upDown>0&&Chess.board[from[0]-i][from[1]]!=null){
