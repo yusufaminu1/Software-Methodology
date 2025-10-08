@@ -30,6 +30,7 @@ public class Chess {
 		returnPlay.piecesOnBoard = currentGame;
 		returnPlay.message=null;
 		String sm ="";
+		// Check for resign
 		if(move.equals("resign")){
 			if(moveNumber%2==1){
 				returnPlay.message =ReturnPlay.Message.RESIGN_BLACK_WINS;
@@ -38,20 +39,22 @@ public class Chess {
 			}
 			return returnPlay;
 		}
+		// converts the move into array indices
 		int[] moveFrom = {9-Character.getNumericValue(move.charAt(1))-1,move.charAt(0)-'a'};
 		int[] moveTo = {9-Character.getNumericValue(move.charAt(4))-1,move.charAt(3)-'a'};
 		if(move.length()>5){
 			 sm = move.substring(6);
 		}
-		
+		// Check to see if the move is from the right player
 		if(board[moveFrom[0]][moveFrom[1]]==null){
 			returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
-
 		}else if(moveNumber%2==1&&!(board[moveFrom[0]][moveFrom[1]] instanceof WhitePiece)){
 			returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
 		}else if(moveNumber%2==0&&!(board[moveFrom[0]][moveFrom[1]] instanceof BlackPiece)){
 			returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
 		}
+
+		// Move the piece if able
 		if(returnPlay.message==null){
 			if(board[moveFrom[0]][moveFrom[1]].move(moveFrom,moveTo,true)){
 				if((board[moveTo[0]][moveTo[1]] instanceof BlackPiece && moveNumber%2==1)||(board[moveTo[0]][moveTo[1]] instanceof WhitePiece && moveNumber%2==0)){
@@ -72,44 +75,60 @@ public class Chess {
 						whiteKing[0]=moveTo[0];
 						whiteKing[1]=moveTo[1];
 				}
-					
+				// Pawn's Promotion	
 				if(board[moveTo[0]][moveTo[1]] instanceof WhitePawn && moveTo[0]==0){
 					int index = board[moveTo[0]][moveTo[1]].index;
-					if(sm.equals("") || sm.equals("Q")){
-						board[moveTo[0]][moveTo[1]] = new WhiteQueen(index);
-						changePiece.pieceType = PieceType.WQ;
-					}else if(sm.equals("N")){
-						board[moveTo[0]][moveTo[1]] = new WhiteKnight(index);
-						changePiece.pieceType = PieceType.WN;
-					}else if (sm.equals("B")){
-						board[moveTo[0]][moveTo[1]] = new WhiteBishop(index);
-						changePiece.pieceType = PieceType.WB;
-					}else if(sm.equals("R")){
-						board[moveTo[0]][moveTo[1]] = new WhiteRook(index);
-						changePiece.pieceType = PieceType.WR;
-					}
+                    switch (sm) {
+                        case "", "Q" -> {
+                            board[moveTo[0]][moveTo[1]] = new WhiteQueen(index);
+                            changePiece.pieceType = PieceType.WQ;
+                        }
+                        case "N" -> {
+                        	board[moveTo[0]][moveTo[1]] = new WhiteKnight(index);
+                        	changePiece.pieceType = PieceType.WN;
+                        }
+                        case "B" -> {
+                        	board[moveTo[0]][moveTo[1]] = new WhiteBishop(index);
+                        	changePiece.pieceType = PieceType.WB;
+                        }
+                        case "R" -> {
+                        	board[moveTo[0]][moveTo[1]] = new WhiteRook(index);
+                        	changePiece.pieceType = PieceType.WR;
+                        }
+                        default -> {
+                        }
+                    }
 					returnPlay.piecesOnBoard.set(board[moveTo[0]][moveTo[1]].index, changePiece);
 				}else if(board[moveTo[0]][moveTo[1]] instanceof BlackPawn && moveTo[0]==7){
 					int index = board[moveTo[0]][moveTo[1]].index;
-					if(sm.equals("") || sm.equals("Q")){
-						board[moveTo[0]][moveTo[1]] = new BlackQueen(index);
-						changePiece.pieceType = PieceType.BQ;
-					}else if(sm.equals("N")){
-						board[moveTo[0]][moveTo[1]] = new BlackKnight(index);
-						changePiece.pieceType = PieceType.BN;
-					}else if (sm.equals("B")){
-						board[moveTo[0]][moveTo[1]] = new BlackBishop(index);
-						changePiece.pieceType = PieceType.BB;
-					}else if(sm.equals("R")){
-						board[moveTo[0]][moveTo[1]] = new BlackRook(index);
-						changePiece.pieceType = PieceType.BR;
-					}
+                    switch (sm) {
+                        case "", "Q" -> {
+                            board[moveTo[0]][moveTo[1]] = new BlackQueen(index);
+                            changePiece.pieceType = PieceType.BQ;
+                        }
+                        case "N" -> {
+                            board[moveTo[0]][moveTo[1]] = new BlackKnight(index);
+                            changePiece.pieceType = PieceType.BN;
+                        }
+                        case "B" -> {
+                            board[moveTo[0]][moveTo[1]] = new BlackBishop(index);
+                            changePiece.pieceType = PieceType.BB;
+                    	}
+                    	case "R" -> {
+                            board[moveTo[0]][moveTo[1]] = new BlackRook(index);
+                            changePiece.pieceType = PieceType.BR;
+                        }
+                    	default -> {
+                    	}
+                    }
 					returnPlay.piecesOnBoard.set(board[moveTo[0]][moveTo[1]].index, changePiece);
 				}
+				// Check for draw
 				if(sm.equals("draw?")){
 					returnPlay.message = ReturnPlay.Message.DRAW;
 					return returnPlay;
 				}
+				// Check for a check
 				for (int i = 0; i < 8; i++) {
             		for (int j = 0; j < 8;j++) {
                 		int[] from2 = { i, j };
@@ -148,28 +167,33 @@ public class Chess {
 				ReturnPiece tempPiece = new ReturnPiece();
 				Piece tempPieceType;
                 if(i==1){
-					
                     tempPiece.pieceType = PieceType.BP;
 					tempPieceType = new BlackPawn(index);
                 }else{
-					if(j==0||j==7){
-                    	tempPiece.pieceType = PieceType.BR;
-						tempPieceType = new BlackRook(index);
-					}else if(j==1||j==6){
-                    	tempPiece.pieceType = PieceType.BN;
-						tempPieceType = new BlackKnight(index);
-					}else if(j==2||j==5){
-                    	tempPiece.pieceType = PieceType.BB;
-						tempPieceType = new BlackBishop(index);
-					}else if(j == 3){
-                    	tempPiece.pieceType = PieceType.BQ;
-						tempPieceType = new BlackQueen(index);
-					}else {
-						blackKing[0]=i;
-						blackKing[1]=j;
-                    	tempPiece.pieceType = PieceType.BK;
-						tempPieceType = new BlackKing(index);
-					}
+                     switch (j) {
+                        case 0, 7 -> {
+                            tempPiece.pieceType = PieceType.BR;
+                            tempPieceType = new BlackRook(index);
+                        }
+                        case 1, 6 -> {
+                            tempPiece.pieceType = PieceType.BN;
+                            tempPieceType = new BlackKnight(index);
+                        }
+                        case 2, 5 -> {
+                            tempPiece.pieceType = PieceType.BB;
+                            tempPieceType = new BlackBishop(index);
+                        }
+                        case 3 -> {
+                            tempPiece.pieceType = PieceType.BQ;
+                            tempPieceType = new BlackQueen(index);
+                        }
+                        default -> {
+                            blackKing[0]=i;
+                            blackKing[1]=j;
+                            tempPiece.pieceType = PieceType.BK;
+                            tempPieceType = new BlackKing(index);
+                        }
+                    }
                 }
 				index++;
 				tempPiece.pieceFile = PieceFile.valueOf(""+(char)(j+'a'));
@@ -187,27 +211,33 @@ public class Chess {
 					tempPiece.pieceType = PieceType.WP;
 					tempPieceType = new WhitePawn(index);
                 }else{
-					if(j==0||j==7){
-                    	tempPiece.pieceType = PieceType.WR;
-						tempPieceType = new WhiteRook(index);
-					}else if(j==1||j==6){
-						//continue;
-                    	tempPiece.pieceType = PieceType.WN;
-						tempPieceType = new WhiteKnight(index);
-					}else if(j==2||j==5){
-						//continue;
-                    	tempPiece.pieceType = PieceType.WB;
-						tempPieceType = new WhiteBishop(index);
-					}else if(j == 3){
-						//continue;
-                    	tempPiece.pieceType = PieceType.WQ;
-						tempPieceType = new WhiteQueen(index);
-					}else {
-						whiteKing[0]=i;
-						whiteKing[1]=j;
-                    	tempPiece.pieceType = PieceType.WK;
-						tempPieceType = new WhiteKing(index);
-					}
+                    switch (j) {
+                        case 0, 7 -> {
+                            tempPiece.pieceType = PieceType.WR;
+                            tempPieceType = new WhiteRook(index);
+                		}
+                		case 1, 6 -> {
+                            //continue;
+                            tempPiece.pieceType = PieceType.WN;
+                            tempPieceType = new WhiteKnight(index);
+                    	}
+                 		case 2, 5 -> {
+                            //continue;
+                            tempPiece.pieceType = PieceType.WB;
+                            tempPieceType = new WhiteBishop(index);
+                    	}
+                    	case 3 -> {
+                            //continue;
+                            tempPiece.pieceType = PieceType.WQ;
+                            tempPieceType = new WhiteQueen(index);
+                    	}
+                        default -> {
+                            whiteKing[0]=i;
+                            whiteKing[1]=j;
+                            tempPiece.pieceType = PieceType.WK;
+                            tempPieceType = new WhiteKing(index);
+                        }
+                    }
                 }
 				index++;
 				tempPiece.pieceFile = PieceFile.valueOf(""+(char)(j+'a'));
