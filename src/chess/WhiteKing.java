@@ -55,7 +55,7 @@ public class WhiteKing extends WhitePiece {
                 return true;
             }
         // Castling
-        }else if(moveNumber==0&&(to[0]==7&&(to[1]==2||to[1]==6))){
+        }else if(moveNumber==0&&(to[0]==7&&(to[1]==2||to[1]==6))&&upDown==0){
             if(to[1]==6&&Chess.board[7][7] instanceof WhiteRook&&Chess.board[7][7].moveNumber==0&&Chess.board[7][6]==null&&Chess.board[7][5]==null){
                 if(checkSelfCheck){
                     if(!SelfCheck(from, to)){

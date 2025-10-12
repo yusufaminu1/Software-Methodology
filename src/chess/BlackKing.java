@@ -55,7 +55,7 @@ public class BlackKing extends BlackPiece{
                 return true;
             }
         // Castling
-        }else if(moveNumber==0&&(to[0]==7&&(to[1]==2||to[1]==6))){
+        }else if(moveNumber==0&&(to[0]==7&&(to[1]==2||to[1]==6))&&upDown==0){
             if(to[1]==6&&Chess.board[0][7] instanceof BlackRook&&Chess.board[0][7].moveNumber==0&&Chess.board[0][6]==null&&Chess.board[0][5]==null){
                 if(checkSelfCheck){
                         if(!SelfCheck(from, to)){
