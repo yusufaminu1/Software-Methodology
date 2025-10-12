@@ -89,7 +89,6 @@ public class BlackKing extends BlackPiece{
 				changePiece.pieceFile = PieceFile.valueOf("d");
 				changePiece.pieceRank = 8;
 				Chess.currentGame.set(Chess.board[0][3].index, changePiece);
-                moveNumber++;
                 Chess.blackKing[0] = to[0];
                 Chess.blackKing[1] = to[1];
                 return true;
@@ -104,7 +103,7 @@ public class BlackKing extends BlackPiece{
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8;j++) {
                 int[] from2 = { i, j };
-                if (Chess.board[i][j] instanceof BlackPiece && Chess.board[i][j].move(from2, Chess.whiteKing,false)) {
+                if (Chess.board[i][j] instanceof WhitePiece && Chess.board[i][j].move(from2, Chess.whiteKing,false)) {
                     return true;
                 }
             }
