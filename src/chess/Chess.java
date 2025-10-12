@@ -185,8 +185,9 @@ public class Chess {
 				ReturnPiece tempPiece = new ReturnPiece();
 				Piece tempPieceType;
                 if(i==1){
-                    tempPiece.pieceType = PieceType.BP;
-					tempPieceType = new BlackPawn(index);
+                    continue;
+                    //tempPiece.pieceType = PieceType.BP;
+					//tempPieceType = new BlackPawn(index);
                 }else{
                      switch (j) {
                         case 0, 7 -> {
@@ -225,8 +226,9 @@ public class Chess {
 				ReturnPiece tempPiece = new ReturnPiece();
 				Piece tempPieceType;
                 if(i==6){
-					tempPiece.pieceType = PieceType.WP;
-					tempPieceType = new WhitePawn(index);
+                    continue;
+					//tempPiece.pieceType = PieceType.WP;
+					//tempPieceType = new WhitePawn(index);
                 }else{
                     switch (j) {
                         case 0, 7 -> {
@@ -234,16 +236,19 @@ public class Chess {
                             tempPieceType = new WhiteRook(index);
                 		}
                 		case 1, 6 -> {
+                            //continue;
                             tempPiece.pieceType = PieceType.WN;
                             tempPieceType = new WhiteKnight(index);
                     	}
                  		case 2, 5 -> {
-                            tempPiece.pieceType = PieceType.WB;
-                            tempPieceType = new WhiteBishop(index);
+                            continue;
+                            //tempPiece.pieceType = PieceType.WB;
+                            //tempPieceType = new WhiteBishop(index);
                     	}
                     	case 3 -> {
-                            tempPiece.pieceType = PieceType.WQ;
-                            tempPieceType = new WhiteQueen(index);
+                            continue;
+                            //tempPiece.pieceType = PieceType.WQ;
+                            //tempPieceType = new WhiteQueen(index);
                     	}
                         default -> {
                             whiteKing[0]=i;

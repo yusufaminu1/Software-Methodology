@@ -55,10 +55,13 @@ public class WhiteKing extends WhitePiece {
                 return true;
             }
         // Castling
-        }else if(moveNumber==0&&(to[0]==7&&(to[1]==2||to[1]==6))&&upDown==0){
+        }else if(moveNumber==0&&(to[0]==7&&(to[1]==2||to[1]==6))&&upDown==0&&!isInCheck()){
             if(to[1]==6&&Chess.board[7][7] instanceof WhiteRook&&Chess.board[7][7].moveNumber==0&&Chess.board[7][6]==null&&Chess.board[7][5]==null){
                 if(checkSelfCheck){
-                    if(!SelfCheck(from, to)){
+                    int[] tempTo = new int[2];
+                    tempTo[0] = to[0];
+                    tempTo[1] = to[1]-1;
+                    if(!SelfCheck(from, to)||!SelfCheck(from,tempTo)){
                         return false;
                     }
                 }
@@ -74,7 +77,10 @@ public class WhiteKing extends WhitePiece {
                 return true;
             }else if(to[1]==2&&Chess.board[7][0] instanceof WhiteRook&&Chess.board[7][0].moveNumber==0&&Chess.board[7][1]==null&&Chess.board[7][2]==null&&Chess.board[7][3]==null){
                 if(checkSelfCheck){
-                    if(!SelfCheck(from, to)){
+                    int[] tempTo = new int[2];
+                    tempTo[0] = to[0];
+                    tempTo[1] = to[1]+1;
+                    if(!SelfCheck(from, to)||!SelfCheck(from,tempTo)){
                         return false;
                     }
                 }
@@ -95,6 +101,17 @@ public class WhiteKing extends WhitePiece {
         }
     }
 
+    private boolean isInCheck() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8;j++) {
+                int[] from2 = { i, j };
+                if (Chess.board[i][j] instanceof BlackPiece && Chess.board[i][j].move(from2, Chess.whiteKing,false)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     @Override
     boolean SelfCheck(int[] from, int[] to) {
         Piece[] temp = new Piece[1];
