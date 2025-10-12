@@ -1,11 +1,10 @@
 package chess;
 
-import java.util.ArrayList;
-
 import chess.ReturnPiece.PieceFile;
 import chess.ReturnPiece.PieceType;
+import java.util.ArrayList;
 
-
+// Yusuf Aminu Jaiveer Singh
 public class Chess {
 
 		static ArrayList<ReturnPiece> currentGame = new ArrayList<>();
@@ -26,6 +25,7 @@ public class Chess {
 	 */
 	public static ReturnPlay play(String move) {
 
+         move = move.trim();
         ReturnPlay returnPlay = new ReturnPlay();
 		returnPlay.piecesOnBoard = currentGame;
 		returnPlay.message=null;
@@ -58,7 +58,16 @@ public class Chess {
 		if(returnPlay.message==null){
 			if(board[moveFrom[0]][moveFrom[1]].move(moveFrom,moveTo,true)){
 				if((board[moveTo[0]][moveTo[1]] instanceof BlackPiece && moveNumber%2==1)||(board[moveTo[0]][moveTo[1]] instanceof WhitePiece && moveNumber%2==0)){
-					Chess.currentGame.set(Chess.board[moveTo[0]][moveTo[1]].index,null);
+                    int indexFrom = Chess.board[moveTo[0]][moveTo[1]].index;
+                    Chess.currentGame.remove(Chess.board[moveTo[0]][moveTo[1]].index);
+                    for(int i =0;i<8;i++){
+                        for(int j = 0;j<8;j++){
+                            if(board[i][j]!=null&&board[i][j].index >indexFrom){
+                                board[i][j].index--;
+                            }
+                        }
+                    }
+					
 				}
 				board[moveTo[0]][moveTo[1]]= board[moveFrom[0]][moveFrom[1]];
 				board[moveFrom[0]][moveFrom[1]]=null;
@@ -123,20 +132,29 @@ public class Chess {
                     }
 					returnPlay.piecesOnBoard.set(board[moveTo[0]][moveTo[1]].index, changePiece);
 				}
-				// Check for draw
-				if(sm.equals("draw?")){
-					returnPlay.message = ReturnPlay.Message.DRAW;
-					return returnPlay;
-				}
-				// Check for a check
-				for (int i = 0; i < 8; i++) {
-            		for (int j = 0; j < 8;j++) {
-                		int[] from2 = { i, j };
-                		if ((Chess.board[i][j] instanceof BlackPiece && Chess.board[i][j].move(from2, Chess.whiteKing,false))||(Chess.board[i][j] instanceof WhitePiece && Chess.board[i][j].move(from2, Chess.blackKing,false))) {
-							returnPlay.message = ReturnPlay.Message.CHECK;
-                		}
-            		}
-        		}
+                //Checks for draw, check, checkmate
+				if (returnPlay.message == null) {
+                    // Check for draw
+                    if (sm.equals("draw?")) {
+                        returnPlay.message = ReturnPlay.Message.DRAW;
+                    } else {
+                        // Finds the opponent for check/checkmate
+                        Player opp = (moveNumber % 2 == 1) ? Player.white : Player.black;
+
+                        //Check for check, if the opponnent has no legal move, then checkmate
+                        if (isInCheck(opp)) {
+                            if (!hasAnyLegalMove(opp)) {
+                                returnPlay.message =
+                                        (opp == Player.white)
+                                                ? ReturnPlay.Message.CHECKMATE_BLACK_WINS
+                                                : ReturnPlay.Message.CHECKMATE_WHITE_WINS;
+                            } else {
+                                returnPlay.message = ReturnPlay.Message.CHECK;
+                            }
+                        }
+                    }
+                }
+
 				board[moveTo[0]][moveTo[1]].moveNumber++;
 			}else{
 				returnPlay.message = ReturnPlay.Message.ILLEGAL_MOVE;
@@ -207,7 +225,6 @@ public class Chess {
 				ReturnPiece tempPiece = new ReturnPiece();
 				Piece tempPieceType;
                 if(i==6){
-					//continue;
 					tempPiece.pieceType = PieceType.WP;
 					tempPieceType = new WhitePawn(index);
                 }else{
@@ -217,17 +234,14 @@ public class Chess {
                             tempPieceType = new WhiteRook(index);
                 		}
                 		case 1, 6 -> {
-                            //continue;
                             tempPiece.pieceType = PieceType.WN;
                             tempPieceType = new WhiteKnight(index);
                     	}
                  		case 2, 5 -> {
-                            //continue;
                             tempPiece.pieceType = PieceType.WB;
                             tempPieceType = new WhiteBishop(index);
                     	}
                     	case 3 -> {
-                            //continue;
                             tempPiece.pieceType = PieceType.WQ;
                             tempPieceType = new WhiteQueen(index);
                     	}
@@ -249,5 +263,94 @@ public class Chess {
 			moveNumber=1;
         }
 		/* FILL IN THIS METHOD */
+
 	}
+
+    //Boolean for check
+    static boolean isInCheck(Player side) {
+        int kr = (side == Player.white) ? whiteKing[0] : blackKing[0];
+        int kc = (side == Player.white) ? whiteKing[1] : blackKing[1];
+        int[] kingSq = new int[] { kr, kc };
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                Piece p = board[r][c];
+                if (p == null) continue;
+                if (side == Player.white && p instanceof BlackPiece) {
+                    Snapshot s = snapshot();
+                    boolean atk = p.move(new int[] { r, c }, kingSq, false);
+                    restore(s);
+                    if (atk) return true;
+                } else if (side == Player.black && p instanceof WhitePiece) {
+                    Snapshot s = snapshot();
+                    boolean atk = p.move(new int[] { r, c }, kingSq, false);
+                    restore(s);
+                    if (atk) return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //Boolean to check for legal moves
+    static boolean hasAnyLegalMove(Player side) {
+        for (int r = 0; r < 8; r++) {
+            for (int c = 0; c < 8; c++) {
+                Piece p = board[r][c];
+                if (p == null) continue;
+                if (side == Player.white && !(p instanceof WhitePiece)) continue;
+                if (side == Player.black && !(p instanceof BlackPiece)) continue;
+                for (int rr = 0; rr < 8; rr++) {
+                    for (int cc = 0; cc < 8; cc++) {
+                        if (rr == r && cc == c) continue;
+                        Snapshot s = snapshot();
+                        boolean ok = p.move(new int[] { r, c }, new int[] { rr, cc }, true);
+                        restore(s);
+                        if (ok) return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    //Snapshot class helps with check and legal move checking by storing the current state of the game
+    static class Snapshot {
+        Piece[][] b = new Piece[8][8];
+        ArrayList<ReturnPiece> g = new ArrayList<>();
+        int[] wk = new int[2];
+        int[] bk = new int[2];
+    }
+
+    //Take a snapshot of the current game
+    static Snapshot snapshot() {
+        Snapshot s = new Snapshot();
+        for (int i = 0; i < 8; i++) {
+            System.arraycopy(board[i], 0, s.b[i], 0, 8);
+        }
+        for (ReturnPiece rp : currentGame) {
+            if (rp == null) {
+                s.g.add(null);
+            } else {
+                ReturnPiece x = new ReturnPiece();
+                x.pieceType = rp.pieceType;
+                x.pieceFile = rp.pieceFile;
+                x.pieceRank = rp.pieceRank;
+                s.g.add(x);
+            }
+        }
+        s.wk[0] = whiteKing[0]; s.wk[1] = whiteKing[1];
+        s.bk[0] = blackKing[0]; s.bk[1] = blackKing[1];
+        return s;
+    }
+
+    //Bring the game back to the snapshot
+    static void restore(Snapshot s) {
+        for (int i = 0; i < 8; i++) {
+            System.arraycopy(s.b[i], 0, board[i], 0, 8);
+        }
+        currentGame = s.g;
+        whiteKing[0] = s.wk[0]; whiteKing[1] = s.wk[1];
+        blackKing[0] = s.bk[0]; blackKing[1] = s.bk[1];
+    }
+
 }

@@ -50,7 +50,16 @@ public class BlackPawn extends BlackPiece {
                             return false;
                         }
                     }
-                    Chess.currentGame.set(Chess.board[to[0]-1][to[1]].index,null);
+                    
+                    int indexFrom = Chess.board[to[0]-1][to[1]].index;
+                    Chess.currentGame.remove(Chess.board[to[0]-1][to[1]].index);
+                    for(int i =0;i<8;i++){
+                        for(int j = 0;j<8;j++){
+                            if(Chess.board[i][j]!=null&&Chess.board[i][j].index >indexFrom){
+                                Chess.board[i][j].index--;
+                            }
+                        }
+                    }
                     Chess.board[to[0]-1][to[1]]=null;
                     return true;
                 }
