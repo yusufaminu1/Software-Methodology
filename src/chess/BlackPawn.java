@@ -1,6 +1,7 @@
 package chess;
 
 public class BlackPawn extends BlackPiece {
+    int chessMoveNumber = 0;
     public BlackPawn(int index) {
         this.index = index;
     }
@@ -28,6 +29,7 @@ public class BlackPawn extends BlackPiece {
                         return false;
                     }
                 }
+                chessMoveNumber = Chess.moveNumber+1;
                 return true;
             }
         // Capture move
@@ -44,7 +46,7 @@ public class BlackPawn extends BlackPiece {
                     return true;
                 }
                 // En Passant
-                else if(Chess.board[to[0]-1][to[1]] instanceof WhitePawn&&to[0]-1==4&&Chess.board[to[0]-1][to[1]].moveNumber==1){
+                else if(Chess.board[to[0]-1][to[1]] instanceof WhitePawn&&to[0]-1==4&&Chess.board[to[0]-1][to[1]].moveNumber==1&&((WhitePawn)Chess.board[to[0]-1][to[1]]).chessMoveNumber==Chess.moveNumber){
                     if(checkSelfCheck){
                         if(!SelfCheck(from, to)){
                             return false;
