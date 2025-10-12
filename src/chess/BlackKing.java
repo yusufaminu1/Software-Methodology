@@ -103,7 +103,7 @@ public class BlackKing extends BlackPiece{
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8;j++) {
                 int[] from2 = { i, j };
-                if (Chess.board[i][j] instanceof WhitePiece && Chess.board[i][j].move(from2, Chess.whiteKing,false)) {
+                if (Chess.board[i][j] instanceof WhitePiece && Chess.board[i][j].move(from2, Chess.blackKing,false)) {
                     return true;
                 }
             }
